@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <string>
-#include "../serialize.h"
+#include "../serializable.h"
 
 struct Identify: public Serializable {
     std::string os;

@@ -1,8 +1,0 @@
-//
-// Created by Ariel Saldana on 8/19/23.
-//
-
-#ifndef DISCORDLITE_DESERIALIZE_H
-#define DISCORDLITE_DESERIALIZE_H
-
-#endif //DISCORDLITE_DESERIALIZE_H

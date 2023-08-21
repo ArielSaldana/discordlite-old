@@ -2,8 +2,8 @@
 // Created by Ariel Saldana on 8/19/23.
 //
 
-#ifndef DISCORDLITE_SERIALIZE_H
-#define DISCORDLITE_SERIALIZE_H
+#ifndef DISCORDLITE_SERIALIZABLE_H
+#define DISCORDLITE_SERIALIZABLE_H
 
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
@@ -25,4 +25,4 @@ public:
     }
 };
 
-#endif //DISCORDLITE_SERIALIZE_H
+#endif //DISCORDLITE_SERIALIZABLE_H

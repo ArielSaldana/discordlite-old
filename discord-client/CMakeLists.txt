@@ -6,8 +6,10 @@ set(CMAKE_CXX_STANDARD 23)
 add_library(discord_client src/library.cpp
         include/gateway/v10/events/receive/hello.h
         include/gateway/v10/events/send/identify.h
-        include/gateway/v10/events/serialize.h
-        include/gateway/v10/events/deserialize.h)
+        include/gateway/v10/events/serializable.h
+        include/gateway/v10/events/deserializable.h
+        include/networking/socket.h
+        src/socket.cpp)
 
 file(GLOB_RECURSE HEADER_FILES include/*.h)
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)

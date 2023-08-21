@@ -6,6 +6,13 @@ set(CMAKE_CXX_STANDARD 23)
 # RapidJSON library to quickly parse json
 find_package(RapidJSON CONFIG REQUIRED)
 
+# Dependency websocketpp required for websockets
+find_package(websocketpp CONFIG REQUIRED)
+
+# Retrieve include directories for websocketpp and add them to our include directories
+get_target_property(websocketpp_INCLUDE_DIRS websocketpp::websocketpp INTERFACE_INCLUDE_DIRECTORIES)
+include_directories(${websocketpp_INCLUDE_DIRS})
+
 #target_link_libraries(discordlite PUBLIC rapidjson)
 
 
