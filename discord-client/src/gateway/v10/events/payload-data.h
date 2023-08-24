@@ -6,7 +6,6 @@
 #define DISCORDLITE_PAYLOAD_DATA_H
 
 struct PayloadData {
-
 };
 
-#endif //DISCORDLITE_PAYLOAD_DATA_H
+#endif//DISCORDLITE_PAYLOAD_DATA_H

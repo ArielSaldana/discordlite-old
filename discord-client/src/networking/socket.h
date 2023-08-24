@@ -8,6 +8,7 @@
 
 //#include "gateway_event_processor.h"
 #include <iostream>
+#include <string>
 #include <websocketpp/client.hpp>
 #include <websocketpp/config/asio_client.hpp>
 
@@ -25,9 +26,9 @@ private:
 
 public:
     void
-    connect();
+    connect(const std::string &uri, const std::string &hostname);
 
-    GatewayEventProcessor gateway_event_processor;
+    //    GatewayEventProcessor gateway_event_processor;
 };
 
-#endif //DISCORDLITE_SOCKET_H
+#endif//DISCORDLITE_SOCKET_H

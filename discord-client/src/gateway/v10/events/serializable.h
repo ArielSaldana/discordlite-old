@@ -6,15 +6,17 @@
 #define DISCORDLITE_SERIALIZABLE_H
 
 #include <rapidjson/document.h>
-#include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
+#include <string>
 
 class Serializable {
 public:
-    virtual rapidjson::Value serialize(rapidjson::Document::AllocatorType& allocator) const = 0;
+    virtual rapidjson::Value serialize(rapidjson::Document::AllocatorType &allocator) const = 0;
 
-    [[nodiscard]] std::string toJsonString() const {
-        rapidjson::Document doc; // Use this document's allocator for serialization
+    [[nodiscard]] std::string toJsonString() const
+    {
+        rapidjson::Document doc;// Use this document's allocator for serialization
         rapidjson::Value val = serialize(doc.GetAllocator());
 
         rapidjson::StringBuffer buffer;
@@ -25,4 +27,4 @@ public:
     }
 };
 
-#endif //DISCORDLITE_SERIALIZABLE_H
+#endif//DISCORDLITE_SERIALIZABLE_H

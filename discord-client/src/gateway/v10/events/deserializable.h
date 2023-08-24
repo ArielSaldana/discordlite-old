@@ -6,14 +6,14 @@
 #define DISCORDLITE_DESERIALIZABLE_H
 
 #include <rapidjson/document.h>
-#include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
-template <typename T>
+template<typename T>
 class Deserializable {
 public:
-    virtual T deserialize(const rapidjson::Value& json) = 0;
+    virtual T deserialize(const rapidjson::Value &json) = 0;
 };
 
 
-#endif //DISCORDLITE_DESERIALIZABLE_H
+#endif//DISCORDLITE_DESERIALIZABLE_H
