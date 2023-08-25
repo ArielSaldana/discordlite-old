@@ -9,11 +9,13 @@
 #include "../deserializable.h"
 #include "../payload-data.h"
 
-struct Hello : public Deserializable<Hello> {
+struct Hello : public Deserializable<Hello>
+{
     int heartbeat_interval{};
 };
 
-struct HelloGatewayEvent : public PayloadData, Deserializable<HelloGatewayEvent> {
+struct HelloGatewayEvent : public PayloadData, Deserializable<HelloGatewayEvent>
+{
     int heartbeat_interval{};
 
     HelloGatewayEvent() = default;

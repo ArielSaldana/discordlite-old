@@ -5,7 +5,8 @@
 #ifndef DISCORDLITE_PAYLOAD_DATA_H
 #define DISCORDLITE_PAYLOAD_DATA_H
 
-struct PayloadData {
+struct PayloadData
+{
 };
 
 #endif//DISCORDLITE_PAYLOAD_DATA_H

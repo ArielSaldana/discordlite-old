@@ -15,5 +15,6 @@ add_library(discord_client src/client.cpp
 file(GLOB_RECURSE HEADER_FILES include/*.h)
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
-target_include_directories(discord_client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${RapidJSON_INCLUDE_DIRS})
+target_include_directories(discord_client
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${RapidJSON_INCLUDE_DIRS})
 #target_link_libraries(discord_client PRIVATE discordlite ${OPENSSL_CRYPTO_LIBRARY} ${OPENSSL_SSL_LIBRARY})

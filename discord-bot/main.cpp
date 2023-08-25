@@ -8,7 +8,7 @@
 
 int main()
 {
-    DiscordLiteClient::connect();
+    DiscordLiteClient::start();
     //    Identify identify;
     //    identify.browser = "Arc";
     //    identify.device = "MBP";

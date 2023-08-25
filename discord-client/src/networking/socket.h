@@ -16,7 +16,8 @@ typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
 typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
 
-class Socket {
+class Socket
+{
 
 private:
     client ws_client;

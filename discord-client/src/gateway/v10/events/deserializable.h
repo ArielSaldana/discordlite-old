@@ -10,7 +10,8 @@
 #include <rapidjson/writer.h>
 
 template<typename T>
-class Deserializable {
+class Deserializable
+{
 public:
     virtual T deserialize(const rapidjson::Value &json) = 0;
 };

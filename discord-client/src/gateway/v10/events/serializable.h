@@ -10,7 +10,8 @@
 #include <rapidjson/writer.h>
 #include <string>
 
-class Serializable {
+class Serializable
+{
 public:
     virtual rapidjson::Value serialize(rapidjson::Document::AllocatorType &allocator) const = 0;
 

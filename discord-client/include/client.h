@@ -7,8 +7,9 @@
 
 #include <iostream>
 
-namespace DiscordLiteClient {
-    [[maybe_unused]] void connect();
+namespace DiscordLiteClient
+{
+    [[maybe_unused]] void start();
 }
 
 
