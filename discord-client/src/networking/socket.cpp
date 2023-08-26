@@ -52,6 +52,21 @@ void Socket::on_message(client *ws_client, websocketpp::connection_hdl hdl, mess
     //    }
 }
 
+void Socket::on_open(client *ws_client, websocketpp::connection_hdl hdl)
+{
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Opened");
+}
+
+void Socket::on_fail(client *ws_client, websocketpp::connection_hdl hdl)
+{
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Failed");
+}
+
+void Socket::on_close(client *ws_client, websocketpp::connection_hdl hdl)
+{
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Closed");
+}
+
 void Socket::send_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg)
 {
     websocketpp::lib::error_code ec;
@@ -67,20 +82,19 @@ void Socket::send_message(client *ws_client, websocketpp::connection_hdl hdl, me
 
 void Socket::connect(const std::string &uri, const std::string &hostname)
 {
-    std::cout << " attempting to make a connection" << std::endl;
-
-    //    std::string uri = "wss://gateway.discord.gg/?v=10&encoding=json";
-    //    std::string hostname = "gateway.discord.gg";
-    //    client ws_client;
-
     try
     {
         ws_client.set_access_channels(websocketpp::log::alevel::all);
         ws_client.clear_access_channels(websocketpp::log::alevel::frame_payload);
         ws_client.init_asio();
         //        ws_client.set_message_handler(bind(&on_message, &ws_client, ::_1, ::_2));
+
+        ws_client.set_open_handler(std::bind(&Socket::on_open, this, &ws_client, std::placeholders::_1));
+        ws_client.set_close_handler(std::bind(&Socket::on_close, this, &ws_client, std::placeholders::_1));
+        ws_client.set_fail_handler(std::bind(&Socket::on_fail, this, &ws_client, std::placeholders::_1));
         ws_client.set_message_handler(
                 std::bind(&Socket::on_message, this, &ws_client, std::placeholders::_1, std::placeholders::_2));
+
         ws_client.set_tls_init_handler(std::bind(&Socket::on_tls_init, this, hostname.c_str(), ::_1));
 
         websocketpp::lib::error_code ec;

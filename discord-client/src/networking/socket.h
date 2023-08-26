@@ -23,6 +23,9 @@ private:
     client ws_client;
     context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl);
     void on_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg);
+    void on_open(client *ws_client, websocketpp::connection_hdl hdl);
+    void on_close(client *ws_client, websocketpp::connection_hdl hdl);
+    void on_fail(client *ws_client, websocketpp::connection_hdl hdl);
     void send_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg);
 
 public:
