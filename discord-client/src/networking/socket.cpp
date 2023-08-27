@@ -36,20 +36,7 @@ context_ptr Socket::on_tls_init(const char *hostname, websocketpp::connection_hd
 
 void Socket::on_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg)
 {
-    std::cout << "on_message called with hdl: " << hdl.lock().get()
-              << " and message: " << msg->get_payload()
-              << std::endl;
-
-    //        HelloEvent hello;
-    //        hello.
-    //        GatewayEventProcessor::process_event(msg->get_payload());
-    //    gateway_event_processor.process_event(ws_client, hdl, msg->get_payload());
-    //    websocketpp::lib::error_code ec;
-
-    //    ws_client->send(hdl, msg->get_payload(), msg->get_opcode(), ec);
-    //    if (ec) {
-    //        std::cout << "Echo failed because: " << ec.message() << std::endl;
-    //    }
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "on_message handler: " + msg->get_payload());
 }
 
 void Socket::on_open(client *ws_client, websocketpp::connection_hdl hdl)
@@ -84,18 +71,32 @@ void Socket::connect(const std::string &uri, const std::string &hostname)
 {
     try
     {
-        ws_client.set_access_channels(websocketpp::log::alevel::all);
-        ws_client.clear_access_channels(websocketpp::log::alevel::frame_payload);
+        // Setup logging levels
+        ws_client.clear_access_channels(websocketpp::log::alevel::all);
+        ws_client.set_access_channels(websocketpp::log::alevel::app);
+        ws_client.set_access_channels(websocketpp::log::alevel::connect);
+        ws_client.set_access_channels(websocketpp::log::alevel::disconnect);
+        ws_client.set_access_channels(websocketpp::log::alevel::control);
+
+        // Initialize asio
         ws_client.init_asio();
-        //        ws_client.set_message_handler(bind(&on_message, &ws_client, ::_1, ::_2));
 
-        ws_client.set_open_handler(std::bind(&Socket::on_open, this, &ws_client, std::placeholders::_1));
-        ws_client.set_close_handler(std::bind(&Socket::on_close, this, &ws_client, std::placeholders::_1));
-        ws_client.set_fail_handler(std::bind(&Socket::on_fail, this, &ws_client, std::placeholders::_1));
-        ws_client.set_message_handler(
-                std::bind(&Socket::on_message, this, &ws_client, std::placeholders::_1, std::placeholders::_2));
-
-        ws_client.set_tls_init_handler(std::bind(&Socket::on_tls_init, this, hostname.c_str(), ::_1));
+        // Setup handlers using lambdas
+        ws_client.set_open_handler([this, client = &ws_client](auto &&hdl) {
+            this->on_open(client, std::forward<decltype(hdl)>(hdl));
+        });
+        ws_client.set_close_handler([this, client = &ws_client](auto &&hdl) {
+            on_close(client, std::forward<decltype(hdl)>(hdl));
+        });
+        ws_client.set_fail_handler([this, client = &ws_client](auto &&hdl) {
+            on_fail(client, std::forward<decltype(hdl)>(hdl));
+        });
+        ws_client.set_tls_init_handler([this, client = hostname.c_str()](auto &&hostname) {
+            return on_tls_init(client, std::forward<decltype(hostname)>(hostname));
+        });
+        ws_client.set_message_handler([this, client = &ws_client](auto &&hdl, auto &&msg) {
+            on_message(client, std::forward<decltype(hdl)>(hdl), std::forward<decltype(msg)>(msg));
+        });
 
         websocketpp::lib::error_code ec;
         client::connection_ptr con = ws_client.get_connection(uri, ec);
@@ -103,7 +104,6 @@ void Socket::connect(const std::string &uri, const std::string &hostname)
         if (ec)
         {
             std::cout << "could not create connection because: " << ec.message() << std::endl;
-            //            return 0;
         }
         // Note that connect here only requests a connection. No network messages are
         // exchanged until the event loop starts running in the next line.
