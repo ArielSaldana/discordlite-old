@@ -24,8 +24,9 @@ void Gateway::process_event(client *ws_client, const websocketpp::connection_hdl
     // Hello Gateway Event
     if (op_code == 10)
     {
-        auto gep = new GatewayEventPayload<HelloGatewayEvent>(json_document);
-        std::cout << gep->d->heartbeat_interval << std::endl;
+        auto gatewayEventPayload = new GatewayEventPayload<HelloGatewayEvent>(json_document);
+        auto helloGatewayEvent = gatewayEventPayload->d.value();
+        std::cout << helloGatewayEvent.heartbeat_interval << std::endl;
     }
 }
 
