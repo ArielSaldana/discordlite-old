@@ -1,4 +1,5 @@
 #include "../include/client.h"
+#include "networking/payload.h"
 #include "networking/socket.h"
 #include <iostream>
 #include <string>
@@ -9,7 +10,18 @@ void DiscordLiteClient::start()
     std::string hostname = "gateway.discord.gg";
 
     Socket websocket;
-    websocket.connect(uri, hostname);
 
-    std::cout << "Connect called" << std::endl;
+    websocket.on_connection_open([] {
+        std::cout << "CONNECTION!!" << std::endl;
+    });
+
+    websocket.on_connection_close([] {
+        std::cout << "CONNECTION CLOSED!!" << std::endl;
+    });
+
+    websocket.on_message([](std::unique_ptr<Payload> p) {
+        std::cout << "GOT A MESSAGE!! Data: " << p->data_string << std::endl;
+    });
+
+    websocket.connect(uri, hostname);
 }

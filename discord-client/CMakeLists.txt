@@ -10,7 +10,11 @@ add_library(discord_client src/client.cpp
         src/gateway/v10/events/serializable.h
         src/gateway/v10/events/deserializable.h
         src/networking/socket.h
-        src/networking/socket.cpp)
+        src/networking/socket.cpp
+        src/gateway.h
+        src/gateway.cpp
+        src/networking/payload.h
+        src/gateway/v10/events/payload-data.h)
 
 file(GLOB_RECURSE HEADER_FILES include/*.h)
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)

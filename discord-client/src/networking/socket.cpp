@@ -34,24 +34,46 @@ context_ptr Socket::on_tls_init(const char *hostname, websocketpp::connection_hd
     return ctx;
 }
 
-void Socket::on_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg)
+void Socket::on_ws_message(client *ws_event_client, websocketpp::connection_hdl hdl, const message_ptr &msg)
 {
-    ws_client->get_alog().write(websocketpp::log::alevel::app, "on_message handler: " + msg->get_payload());
+    ws_event_client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
+
+    std::unique_ptr<Payload> p = std::make_unique<Payload>();
+    p->client = ws_event_client;
+    p->hdl = &hdl;
+    p->data_string = msg->get_raw_payload();
+
+    if (on_message_cb_trigger)
+    {
+        on_message_cb_trigger(std::move(p));
+    }
 }
 
-void Socket::on_open(client *ws_client, websocketpp::connection_hdl hdl)
+void Socket::on_ws_open(client *ws_client, websocketpp::connection_hdl hdl)
 {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Opened");
+    if (on_connection_open_cb_trigger)
+    {
+        on_connection_open_cb_trigger();
+    }
 }
 
-void Socket::on_fail(client *ws_client, websocketpp::connection_hdl hdl)
+void Socket::on_ws_fail(client *ws_client, websocketpp::connection_hdl hdl)
 {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Failed");
+    if (on_connection_fail_cb_trigger)
+    {
+        on_connection_fail_cb_trigger();
+    }
 }
 
-void Socket::on_close(client *ws_client, websocketpp::connection_hdl hdl)
+void Socket::on_ws_close(client *ws_client, websocketpp::connection_hdl hdl)
 {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Closed");
+    if (on_connection_close_cb_trigger)
+    {
+        on_connection_close_cb_trigger();
+    }
 }
 
 void Socket::send_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg)
@@ -83,19 +105,19 @@ void Socket::connect(const std::string &uri, const std::string &hostname)
 
         // Setup handlers using lambdas
         ws_client.set_open_handler([this, client = &ws_client](auto &&hdl) {
-            this->on_open(client, std::forward<decltype(hdl)>(hdl));
+            this->on_ws_open(client, std::forward<decltype(hdl)>(hdl));
         });
         ws_client.set_close_handler([this, client = &ws_client](auto &&hdl) {
-            on_close(client, std::forward<decltype(hdl)>(hdl));
+            on_ws_close(client, std::forward<decltype(hdl)>(hdl));
         });
         ws_client.set_fail_handler([this, client = &ws_client](auto &&hdl) {
-            on_fail(client, std::forward<decltype(hdl)>(hdl));
+            on_ws_fail(client, std::forward<decltype(hdl)>(hdl));
         });
         ws_client.set_tls_init_handler([this, client = hostname.c_str()](auto &&hostname) {
             return on_tls_init(client, std::forward<decltype(hostname)>(hostname));
         });
         ws_client.set_message_handler([this, client = &ws_client](auto &&hdl, auto &&msg) {
-            on_message(client, std::forward<decltype(hdl)>(hdl), std::forward<decltype(msg)>(msg));
+            on_ws_message(client, std::forward<decltype(hdl)>(hdl), std::forward<decltype(msg)>(msg));
         });
 
         websocketpp::lib::error_code ec;
@@ -118,4 +140,9 @@ void Socket::connect(const std::string &uri, const std::string &hostname)
     {
         std::cout << e.what() << std::endl;
     }
+}
+
+client *Socket::get_client()
+{
+    return &(this->ws_client);
 }

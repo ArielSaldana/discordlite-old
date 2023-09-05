@@ -7,6 +7,7 @@
 
 
 //#include "gateway_event_processor.h"
+#include "payload.h"
 #include <iostream>
 #include <string>
 #include <websocketpp/client.hpp>
@@ -21,18 +22,51 @@ class Socket
 
 private:
     client ws_client;
+    std::function<void()> on_connection_open_cb_trigger = nullptr;
+    std::function<void()> on_connection_close_cb_trigger = nullptr;
+    std::function<void()> on_connection_fail_cb_trigger = nullptr;
+    //    std::function<void(std::unique_ptr<Payload>)> on_message_cb_trigger = nullp/tr;
+    //    std::function<void(Payload)> on_message_cb_trigger = nullptr;
+    //    std::function<Payload()> on_message_cb_trigger = nullptr;
+    //    std::function<void(Payload)> on_message_cb_trigger = nullptr;
+    std::function<void(std::unique_ptr<Payload>)> on_message_cb_trigger = nullptr;
+
+
     context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl);
-    void on_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg);
-    void on_open(client *ws_client, websocketpp::connection_hdl hdl);
-    void on_close(client *ws_client, websocketpp::connection_hdl hdl);
-    void on_fail(client *ws_client, websocketpp::connection_hdl hdl);
+
+    void on_ws_message(client *ws_client, websocketpp::connection_hdl hdl, const message_ptr &msg);
+    void on_ws_open(client *ws_client, websocketpp::connection_hdl hdl);
+    void on_ws_close(client *ws_client, websocketpp::connection_hdl hdl);
+    void on_ws_fail(client *ws_client, websocketpp::connection_hdl hdl);
     void send_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg);
 
 public:
-    void
-    connect(const std::string &uri, const std::string &hostname);
+    client *get_client();
+    void connect(const std::string &uri, const std::string &hostname);
 
-    //    GatewayEventProcessor gateway_event_processor;
+    template<typename Callable>
+    void on_connection_open(Callable callback)
+    {
+        this->on_connection_open_cb_trigger = std::move(callback);
+    }
+
+    template<typename Callable>
+    void on_connection_close(Callable callback)
+    {
+        this->on_connection_close_cb_trigger = std::move(callback);
+    }
+
+    template<typename Callable>
+    void on_connection_fail(Callable callback)
+    {
+        this->on_connection_fail_cb_trigger = std::move(callback);
+    }
+
+    template<typename Callable>
+    void on_message(Callable &&callback)
+    {
+        this->on_message_cb_trigger = std::forward<Callable>(callback);
+    }
 };
 
 #endif//DISCORDLITE_SOCKET_H
