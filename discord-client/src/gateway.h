@@ -20,8 +20,9 @@ typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
 
 class Gateway
 {
-    std::pair<int, rapidjson::Document> peek_opcode(const std::string &payload_json);
-    void process_event(client *ws_client, websocketpp::connection_hdl hdl, const std::string &payload);
+public:
+    static std::pair<int, rapidjson::Document> peek_opcode(const std::string &payload_json);
+    static void process_event(client *ws_client, const websocketpp::connection_hdl &hdl, const std::string &payload);
     void handle_gateway_message();
 };
 

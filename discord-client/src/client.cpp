@@ -1,4 +1,5 @@
 #include "../include/client.h"
+#include "gateway.h"
 #include "networking/payload.h"
 #include "networking/socket.h"
 #include <iostream>
@@ -20,6 +21,7 @@ void DiscordLiteClient::start()
     });
 
     websocket.on_message([](std::unique_ptr<Payload> p) {
+        Gateway::process_event(p->client, *p->hdl, p->data_string);
         std::cout << "GOT A MESSAGE!! Data: " << p->data_string << std::endl;
     });
 

@@ -25,12 +25,7 @@ private:
     std::function<void()> on_connection_open_cb_trigger = nullptr;
     std::function<void()> on_connection_close_cb_trigger = nullptr;
     std::function<void()> on_connection_fail_cb_trigger = nullptr;
-    //    std::function<void(std::unique_ptr<Payload>)> on_message_cb_trigger = nullp/tr;
-    //    std::function<void(Payload)> on_message_cb_trigger = nullptr;
-    //    std::function<Payload()> on_message_cb_trigger = nullptr;
-    //    std::function<void(Payload)> on_message_cb_trigger = nullptr;
     std::function<void(std::unique_ptr<Payload>)> on_message_cb_trigger = nullptr;
-
 
     context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl);
 

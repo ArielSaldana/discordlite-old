@@ -12,7 +12,7 @@ std::pair<int, rapidjson::Document> Gateway::peek_opcode(const std::string &payl
     return std::make_pair(op_code.GetInt(), std::move(json_doc));
 }
 
-void Gateway::process_event(client *ws_client, websocketpp::connection_hdl hdl, const std::string &payload)
+void Gateway::process_event(client *ws_client, const websocketpp::connection_hdl &hdl, const std::string &payload)
 {
     auto event_context = peek_opcode(payload);
     auto op_code = event_context.first;
