@@ -3,6 +3,9 @@
 //
 
 #include "gateway.h"
+#include "gateway/v10/events/gateway-event-payload.h"
+#include "gateway/v10/events/receive/hello.h"
+
 
 std::pair<int, rapidjson::Document> Gateway::peek_opcode(const std::string &payload_json)
 {
@@ -18,15 +21,11 @@ void Gateway::process_event(client *ws_client, const websocketpp::connection_hdl
     auto op_code = event_context.first;
     rapidjson::Document json_document = std::move(event_context.second);
 
-    std::cout << "ATTEMPTING TO PROCESS EVENT" << std::endl;
-    std::cout << op_code << std::endl;
-
+    // Hello Gateway Event
     if (op_code == 10)
     {
-        //        Payload::deserialize(json_document);
-    }
-    else
-    {
+        auto gep = new GatewayEventPayload<HelloGatewayEvent>(json_document);
+        std::cout << gep->d->heartbeat_interval << std::endl;
     }
 }
 
