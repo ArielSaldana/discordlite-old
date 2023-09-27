@@ -44,7 +44,7 @@ void Gateway::process_event(client *ws_client, const websocketpp::connection_hdl
         auto presence = Presence();
         auto identify = Identify();
 
-        identify.token = "MTE1NjQyMDQ3MTAxMzc3NzU4MA.G-X3Cl.IhnMR7NGKv-rsrYAaiNPa8ZVlI8bfU9T-HS7Tk";
+        identify.token = "";
         identify.properties = properties;
         identify.large_threshold = 250;
         //        identify.intents = 7;
