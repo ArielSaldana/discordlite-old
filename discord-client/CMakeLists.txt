@@ -15,7 +15,8 @@ add_library(discord_client src/client.cpp
         src/gateway.cpp
         src/networking/payload.h
         src/gateway/v10/events/payload-data.h
-        src/gateway/v10/events/gateway-event-payload.h)
+        src/gateway/v10/events/gateway-event-payload.h
+        src/heartbeat.h)
 
 file(GLOB_RECURSE HEADER_FILES include/*.h)
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)

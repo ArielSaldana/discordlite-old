@@ -33,7 +33,7 @@ private:
     void on_ws_open(client *ws_client, websocketpp::connection_hdl hdl);
     void on_ws_close(client *ws_client, websocketpp::connection_hdl hdl);
     void on_ws_fail(client *ws_client, websocketpp::connection_hdl hdl);
-    void send_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg);
+    static void send_message(client *ws_client, websocketpp::connection_hdl hdl, message_ptr msg);
 
 public:
     client *get_client();

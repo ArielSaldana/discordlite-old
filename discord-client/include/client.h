@@ -9,8 +9,12 @@
 
 namespace DiscordLiteClient
 {
+    struct Client
+    {
+    };
+
     [[maybe_unused]] void start();
-}
+}// namespace DiscordLiteClient
 
 
 #endif//DISCORDLITE_CLIENT_H

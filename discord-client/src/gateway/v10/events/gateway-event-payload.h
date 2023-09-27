@@ -21,9 +21,18 @@ struct GatewayEventPayload
     std::optional<int> s;
     std::optional<std::string> t;
 
-    GatewayEventPayload(const rapidjson::Document &json_doc)
+    GatewayEventPayload()
+    {
+    }
+
+    explicit GatewayEventPayload(const rapidjson::Document &json_doc)
     {
         op = json_doc["op"].GetInt();
+
+        if (json_doc.HasMember("d") && json_doc["d"].IsObject())
+        {
+            d = T(json_doc["d"].GetObject());
+        }
 
         if (json_doc.HasMember("s") && json_doc["s"].IsInt())
         {
@@ -33,10 +42,6 @@ struct GatewayEventPayload
         if (json_doc.HasMember("t") && json_doc["t"].IsString())
         {
             t = json_doc["t"].GetString();// Assigning the value of 'd'
-        }
-        if (json_doc.HasMember("d") && json_doc["d"].IsObject())
-        {
-            d = T(json_doc["d"].GetObject());
         }
     }
 };

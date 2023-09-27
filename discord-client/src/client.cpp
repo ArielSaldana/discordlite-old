@@ -13,7 +13,7 @@ void DiscordLiteClient::start()
     Socket websocket;
 
     websocket.on_connection_open([] {
-        std::cout << "CONNECTION!!" << std::endl;
+        //        std::cout << "CONNECTION!!" << std::endl;
     });
 
     websocket.on_connection_close([] {
@@ -22,7 +22,7 @@ void DiscordLiteClient::start()
 
     websocket.on_message([](std::unique_ptr<Payload> p) {
         Gateway::process_event(p->client, *p->hdl, p->data_string);
-        std::cout << "GOT A MESSAGE!! Data: " << p->data_string << std::endl;
+        //        std::cout << "GOT A MESSAGE!! Data: " << p->data_string << std::endl;
     });
 
     websocket.connect(uri, hostname);
